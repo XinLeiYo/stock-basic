@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #FBF7F0; color: #22201C; font-family: "Noto Sans TC", sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #C4552F; text-decoration: none; border-bottom: 1px solid #E0C2B4; }
+  a:hover { color: #22201C; border-bottom-color: #22201C; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<sc-if value="{{ atHome }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height: 100vh; padding: 110px 24px 160px;">
+    <div style="max-width: 860px; margin: 0 auto;">
+      <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 28px;">給第一次碰股票的你 · 三堂課</div>
+      <h1 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 66px; line-height: 1.18; letter-spacing: -.01em; margin: 0 0 32px; text-wrap: balance;">從完全不懂，<br />到每個月自動買。</h1>
+      <p style="font-size: 21px; line-height: 1.9; color: #55503F; max-width: 620px; margin: 0 0 56px; text-wrap: pretty;">三堂課，加起來大概一小時。第一堂建立觀念，第二堂真的開戶下單，第三堂看懂市面上那些 ETF。點下面任何一堂開始，隨時可以用最下面那排按鈕跳來跳去。</p>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 56px;">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+          <button onClick="{{ c.go }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 34px 34px; cursor: pointer; display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;" style-hover="border-color: #22201C;">
+            <div style="font-family: 'Noto Serif TC', serif; font-size: 46px; font-weight: 900; color: #C4552F; line-height: 1; min-width: 60px;">{{ c.num }}</div>
+            <div style="flex: 1; min-width: 240px;">
+              <div style="font-family: 'Noto Serif TC', serif; font-size: 28px; font-weight: 900; margin-bottom: 10px;">{{ c.title }}</div>
+              <p style="font-size: 17px; line-height: 1.9; color: #55503F; margin: 0 0 16px;">{{ c.desc }}</p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <sc-for list="{{ c.tags }}" as="t" hint-placeholder-count="3">
+                  <span style="font-size: 13px; font-weight: 500; color: #7A7263; background: #F5EFE2; border-radius: 999px; padding: 6px 12px;">{{ t.t }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <div style="font-size: 15px; font-weight: 700; color: #C4552F; align-self: center;">開始 →</div>
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="background: #22201C; color: #FBF7F0; border-radius: 6px; padding: 36px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #E0A87C; margin-bottom: 16px;">如果你只有十分鐘</div>
+        <p style="font-size: 19px; line-height: 1.9; margin: 0 0 20px; color: #E8E1D4;">直接看第 1 堂的「一道菜 vs 便當」，跟第 2 堂的最後一段「設好定期定額，然後把 APP 藏起來」。這兩段大概就是整個課程 80% 的價值。</p>
+        <p style="font-size: 15px; line-height: 1.9; color: #8B8375; margin: 0;">本課程為觀念與流程說明，不是投資建議，提到的商品皆為舉例。投資有風險，決定和結果都是你自己的。</p>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ show1 }}" hint-placeholder-val="{{ false }}">
+  <dc-import name="lesson1" hint-size="100%,100vh"></dc-import>
+</sc-if>
+<sc-if value="{{ show2 }}" hint-placeholder-val="{{ false }}">
+  <dc-import name="lesson2" hint-size="100%,100vh"></dc-import>
+</sc-if>
+<sc-if value="{{ show3 }}" hint-placeholder-val="{{ false }}">
+  <dc-import name="lesson3" hint-size="100%,100vh"></dc-import>
+</sc-if>
+
+<div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; display: flex; justify-content: center; padding: 16px 16px 20px; pointer-events: none;">
+  <div style="display: flex; gap: 6px; background: rgba(34,32,28,.95); backdrop-filter: blur(10px); border-radius: 999px; padding: 7px; box-shadow: 0 6px 24px rgba(34,32,28,.28); pointer-events: auto; flex-wrap: wrap; justify-content: center;">
+    <sc-for list="{{ switcher }}" as="s" hint-placeholder-count="4">
+      <button onClick="{{ s.go }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; padding: 11px 18px; border: 0; border-radius: 999px; cursor: pointer; background: {{ s.bg }}; color: {{ s.fg }};">{{ s.label }}</button>
+    </sc-for>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:900}}">
+const LESSONS = [
+  { key: 'home', short: '課程首頁' },
+  { key: 'l1', short: '第 1 堂 · 觀念', num: '01', title: '股票是一道菜，ETF 是一個便當',
+    desc: '股票憑什麼賺錢、為什麼帳面紅字不等於真虧、個股跟 ETF 差在哪、複利和時間的力量、什麼時候該賣。',
+    tags: ['約 20 分鐘', '6 題測驗', '複利試算機'] },
+  { key: 'l2', short: '第 2 堂 · 動手', num: '02', title: '開戶與你的第一筆下單',
+    desc: '要準備什麼、券商怎麼挑、下單畫面那些名詞、手續費和交易稅實際是多少、六步驟走一遍，最後設好定期定額。',
+    tags: ['約 20 分鐘', '4 題測驗', '費用試算機'] },
+  { key: 'l3', short: '第 3 堂 · 盤點', num: '03', title: '熱門 ETF 大盤點',
+    desc: '市值型、高股息、主題型、債券與槓桿——各自裝什麼、優缺點、以及什麼時候它會讓你失望。附決策流程。',
+    tags: ['約 20 分鐘', '5 題測驗', '四類對照表'] }
+];
+
+class Component extends DCLogic {
+  state = { view: 'home' };
+
+  componentDidMount() {
+    const fromHash = (location.hash || '').replace('#', '');
+    if (LESSONS.some(l => l.key === fromHash)) this.setState({ view: fromHash });
+    this._onHash = () => {
+      const k = (location.hash || '').replace('#', '') || 'home';
+      if (LESSONS.some(l => l.key === k)) this.setState({ view: k });
+    };
+    window.addEventListener('hashchange', this._onHash);
+  }
+
+  componentWillUnmount() { window.removeEventListener('hashchange', this._onHash); }
+
+  go(key) {
+    if (this.state.view === key) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    this.setState({ view: key }, () => window.scrollTo({ top: 0 }));
+    if (history.replaceState) history.replaceState(null, '', key === 'home' ? location.pathname : '#' + key);
+  }
+
+  renderVals() {
+    const { view } = this.state;
+    return {
+      atHome: view === 'home',
+      show1: view === 'l1',
+      show2: view === 'l2',
+      show3: view === 'l3',
+      cards: LESSONS.filter(l => l.key !== 'home').map(l => ({
+        num: l.num, title: l.title, desc: l.desc,
+        tags: l.tags.map(t => ({ t })),
+        go: () => this.go(l.key)
+      })),
+      switcher: LESSONS.map(l => ({
+        label: l.short,
+        bg: view === l.key ? '#FBF7F0' : 'transparent',
+        fg: view === l.key ? '#22201C' : '#B5AC9B',
+        go: () => this.go(l.key)
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
