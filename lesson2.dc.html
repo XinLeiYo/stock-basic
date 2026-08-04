@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #FBF7F0; color: #22201C; font-family: "Noto Sans TC", sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #C4552F; text-decoration: none; border-bottom: 1px solid #E0C2B4; }
+  a:hover { color: #22201C; border-bottom-color: #22201C; }
+  * { box-sizing: border-box; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: #E5DCCC; border-radius: 4px; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9px; border-radius: 50%; background: #C4552F; border: 3px solid #FBF7F0; box-shadow: 0 1px 4px rgba(0,0,0,.2); cursor: pointer; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<div style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(251,247,240,.92); backdrop-filter: blur(8px); border-bottom: 1px solid #E5DCCC;">
+  <div style="height: 3px; background: #EFE7D8;">
+    <div style="height: 3px; background: #C4552F; width: {{ progressPct }}%;"></div>
+  </div>
+  <div style="max-width: 980px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 18px; justify-content: space-between;">
+    <div style="font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15px; letter-spacing: .04em; white-space: nowrap;">第 2 堂 · 動手</div>
+    <div style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.go }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 11px; border: 0; border-radius: 999px; cursor: pointer; background: {{ n.bg }}; color: {{ n.fg }};">{{ n.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+<section data-screen-label="封面" style="padding: 150px 24px 110px;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 28px;">第 2 堂 · 這堂課要動手</div>
+    <h1 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 68px; line-height: 1.18; letter-spacing: -.01em; margin: 0 0 32px; text-wrap: balance;">先去買一個便當，<br />再研究菜單。</h1>
+    <p style="font-size: 21px; line-height: 1.9; color: #55503F; max-width: 640px; margin: 0 0 44px; text-wrap: pretty;">上一堂我們把觀念講完了。這堂課不加新觀念，只做一件事：讓你真的開好戶、真的買到第一筆。金額多小都沒關係，3000 塊就好。因為在你手上有東西之後，你才會真正聽得懂後面所有的東西。</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 56px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">開戶 20 分鐘</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">下單 2 分鐘</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">1 台費用試算機</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">4 題小測驗</div>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 14px; padding-top: 34px; border-top: 2px solid #22201C; max-width: 640px;">
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 44px; font-weight: 700; line-height: 1;">1</div>
+      <div>
+        <div style="font-size: 19px; font-weight: 700; margin-bottom: 4px;">開戶：拿到你的餐券</div>
+        <div style="font-size: 15px; color: #7A7263;">往下滑就開始了</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="t1" data-screen-label="01 開戶" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">步驟 1</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">開戶其實是開兩個戶，你只跑一次</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 22px; text-wrap: pretty;">你想想看去健身房。你要辦一張會員卡（進得去），還要綁一個自動扣款帳戶（每月付錢）。買股票一樣：一個「證券戶」拿來記錄你買了什麼，一個「交割銀行帳戶」拿來實際付錢跟收錢。</p>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 40px; text-wrap: pretty;">好消息是現在線上開戶，兩個一起辦完，全程在手機上，大概 20 分鐘，兩三個工作日內開通。</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 34px; margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 24px;">動手前先把這幾樣放在手邊</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 26px;">
+        <div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px;">雙證件</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">身分證正反面，加健保卡或駕照。要拍照上傳，找光線好的地方。</p>
+        </div>
+        <div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px;">一組銀行帳號</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">用來扣款、收股利。有些券商會在流程裡直接幫你開一個新的數位帳戶。</p>
+        </div>
+        <div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px;">一支自拍鏡頭</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">要錄一段「我是本人」的視訊驗證，念一串數字。不用化妝，但別在很吵的地方。</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F5EFE2; border-radius: 6px; padding: 30px 32px; margin-bottom: 48px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A8B6C; margin-bottom: 16px;">券商要選哪一家？只看三件事</div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 12px;"><span style="color:#C4552F; font-weight: 700;">一</span><p style="margin: 0; font-size: 17px; line-height: 1.9; color: #55503F;"><strong style="color:#22201C">手續費折扣、以及「低消」是多少。</strong>你會買小額，低消 1 元跟低消 20 元對你差很多——下一段有試算，你會看到差距。</p></div>
+        <div style="display: flex; gap: 12px;"><span style="color:#C4552F; font-weight: 700;">二</span><p style="margin: 0; font-size: 17px; line-height: 1.9; color: #55503F;"><strong style="color:#22201C">有沒有「定期定額」功能，而且你要買的那檔在清單裡。</strong>這是你之後每個月唯一會用到的功能。</p></div>
+        <div style="display: flex; gap: 12px;"><span style="color:#C4552F; font-weight: 700;">三</span><p style="margin: 0; font-size: 17px; line-height: 1.9; color: #55503F;"><strong style="color:#22201C">APP 你操作起來會不會怕。</strong>就這樣。不用比研究報告、不用比 VIP 服務，你一年只登入幾次。</p></div>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 1 / 4</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q1.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q1.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q1.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q1.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="t2" data-screen-label="02 名詞" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF; background: #F7F1E6;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">步驟 2</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">下單畫面上那些字，其實只有四個要懂</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">第一次打開下單畫面，會有十幾個欄位在瞪你。放心，你要買 ETF 長期放，真正需要理解的只有這四組，其他都可以用預設值。</p>
+
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 30px 32px;">
+        <div style="display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 25px; font-weight: 900;">整股 vs 零股</div>
+          <div style="font-size: 14px; color: #9A9080;">你要買幾份</div>
+        </div>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0 0 12px;">台股的傳統單位是「一張」= 1000 股。0050 一股大概兩百多塊，所以一張要二十幾萬——這對你沒必要。</p>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;"><strong style="color:#22201C">你要用的是「零股」</strong>，可以只買 1 股、13 股、隨便幾股。盤中零股（早上 9 點到下午 1 點半）每幾分鐘撮合一次，也有盤後零股（收盤後）。差別對你不重要，選盤中就好。</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 30px 32px;">
+        <div style="display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 25px; font-weight: 900;">市價 vs 限價</div>
+          <div style="font-size: 14px; color: #9A9080;">你願意付多少</div>
+        </div>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0 0 12px;"><strong style="color:#22201C">限價</strong>＝「我最多出 240 元，貴了我不要」。你出的價格要買得到，得有人願意賣你。</p>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;"><strong style="color:#22201C">市價</strong>＝「現在多少我都買」。成交快，但偶爾會成交在你沒預期的價格。買 ETF 長期放，兩個都可以，習慣用限價、把價格設在現價附近一點點就好。</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 30px 32px;">
+        <div style="display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 25px; font-weight: 900;">ROD / IOC / FOK</div>
+          <div style="font-size: 14px; color: #9A9080;">沒成交的話怎麼辦</div>
+        </div>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">ROD ＝「掛到收盤，沒成交就算了」。IOC / FOK 是「立刻成交不然取消」的短線工具。<strong style="color:#22201C">你永遠用 ROD（通常是預設值），這一格看過就可以忘記。</strong></p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 30px 32px;">
+        <div style="display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 25px; font-weight: 900;">現股 vs 融資</div>
+          <div style="font-size: 14px; color: #9A9080;">錢是誰的</div>
+        </div>
+        <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">現股＝用你自己的錢。融資＝跟券商借錢買，跌下來會被追繳、被強制賣掉。<strong style="color:#22201C">永遠選現股。</strong>這是這堂課唯一一個「絕對不要」。</p>
+      </div>
+    </div>
+
+    <div style="background: #22201C; color: #FBF7F0; border-radius: 6px; padding: 32px 34px; margin-bottom: 48px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #E0A87C; margin-bottom: 14px;">還有一個時間概念：T + 2</div>
+      <p style="font-size: 17px; line-height: 1.95; margin: 0; color: #E8E1D4;">你今天買，錢不是今天扣，是<strong style="color:#F2C14E">第二個交易日早上</strong>從交割帳戶自動扣走。所以下單前要確認帳戶裡有錢——扣不到會「違約交割」，那是會上信用紀錄的麻煩事。賣出也一樣，錢要等兩天才會進帳。</p>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px; background: #FFFDF9;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 2 / 4</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q2.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q2.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q2.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q2.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="t3" data-screen-label="03 費用試算" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">步驟 3</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">買一次要付多少「服務費」？自己拉來看</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 22px; text-wrap: pretty;">買賣股票有兩筆錢不是給公司的：<strong style="color:#22201C">手續費</strong>（給券商，買和賣都收，公定 0.1425%，券商會給你折扣）跟<strong style="color:#22201C">證券交易稅</strong>（給政府，只有賣出才收；ETF 是 0.1%，個股 0.3%）。</p>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">重點在那個「低消」：很多券商規定一筆最少收 20 元。你買 1000 塊，20 元就是 2%——比你一整年的內扣費用還貴。拉一下看看。</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 36px 34px; margin-bottom: 28px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 26px; margin-bottom: 32px;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+            <span style="font-size: 14px; font-weight: 700; color: #7A7263;">這筆想投入</span>
+            <span style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700;">{{ amountLabel }}</span>
+          </div>
+          <input type="range" min="1000" max="100000" step="1000" value="{{ amount }}" onChange="{{ setAmount }}" style="width: 100%; height: 22px; cursor: pointer;" />
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+            <span style="font-size: 14px; font-weight: 700; color: #7A7263;">券商手續費折扣</span>
+            <span style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700;">{{ discountLabel }}</span>
+          </div>
+          <input type="range" min="1" max="10" step="0.5" value="{{ discount }}" onChange="{{ setDiscount }}" style="width: 100%; height: 22px; cursor: pointer;" />
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #7A7263; margin-bottom: 10px;">最低手續費（低消）</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <sc-for list="{{ minFeeOpts }}" as="m" hint-placeholder-count="3">
+              <button onClick="{{ m.pick }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; padding: 10px 16px; border-radius: 4px; cursor: pointer; background: {{ m.bg }}; border: 2px solid {{ m.bd }}; color: {{ m.fg }};">{{ m.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0; border-top: 2px solid #22201C;">
+        <div style="padding: 24px 24px 24px 0; border-right: 1px dashed #DCD2BF;">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 10px;">買進這一筆</div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 38px; font-weight: 900; margin-bottom: 6px;">{{ buyFeeLabel }}</div>
+          <div style="font-size: 15px; color: #55503F; line-height: 1.8;">手續費，等於投入金額的 <strong style="color:#C4552F">{{ buyFeePct }}</strong></div>
+        </div>
+        <div style="padding: 24px;">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 10px;">如果原價賣掉（手續費＋證交稅）</div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 38px; font-weight: 900; margin-bottom: 6px;">{{ sellCostLabel }}</div>
+          <div style="font-size: 15px; color: #55503F; line-height: 1.8;">一買一賣總成本 <strong style="color:#C4552F">{{ roundTripPct }}</strong>，你要先漲這麼多才回本</div>
+        </div>
+      </div>
+      <div style="margin-top: 26px; padding-top: 24px; border-top: 1px dashed #DCD2BF; font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 500; line-height: 1.7;">{{ feeVerdict }}</div>
+      <div style="margin-top: 12px; font-size: 14px; color: #9A9080;">實際費率、低消、折扣依券商而異，這裡用常見的公定價示意。定期定額的收費規則常常跟自己下單不一樣，要看券商公告。</div>
+    </div>
+
+    <div style="background: #F5EFE2; border-radius: 6px; padding: 28px 30px; margin-bottom: 48px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A8B6C; margin-bottom: 10px;">這就是「不要一直買賣」的第二個理由</div>
+      <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">第一個理由是你猜不到高低點。第二個更硬：<strong style="color:#22201C">每次進出都要付過路費</strong>。一年買賣 20 次，光成本就吃掉你好幾 %，而長期報酬平均一年也只有 7% 上下。抱著不動，是唯一一個「什麼都不做就贏」的策略。</p>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 3 / 4</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q3.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q3.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q3.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q3.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="t4" data-screen-label="04 走一遍下單" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF; background: #F7F1E6;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">步驟 4</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">現在，一起把單子送出去</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">每家 APP 長得不一樣，但順序都一樣。下面照著做一次，你就會了。</p>
+
+    <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 40px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="6">
+        <div style="display: flex; gap: 22px; align-items: flex-start; padding: 26px 0; border-top: 1px solid #DCD2BF;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 26px; font-weight: 900; color: #C4552F; min-width: 42px;">{{ s.n }}</div>
+          <div>
+            <div style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">{{ s.title }}</div>
+            <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">{{ s.body }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="background: #FFFFFF; border: 2px solid #22201C; border-radius: 6px; padding: 34px; margin-bottom: 40px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 8px;">最後一步，也是最重要的一步</div>
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; line-height: 1.5; margin-bottom: 18px;">去設「定期定額」，然後把 APP 從首頁刪掉。</div>
+      <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0 0 12px;">在券商 APP 找「定期定額」，選你的 ETF、選每月扣款日（薪水入帳後一兩天）、填一個你不會心痛的金額，送出。從此它每個月自己買，你不用做決定、不用挑時機、不用看盤。</p>
+      <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">然後——真心建議——<strong style="color:#22201C">把 APP 從手機首頁移走</strong>。你越少看它，你的長期報酬越高。這不是玩笑話，這是這堂課最有價值的一句。</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 32px 34px; margin-bottom: 48px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 22px;">你大概會遇到的四個卡關</div>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">「我掛的單一直沒成交？」</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">你的限價比市場價低，沒人願意賣你。往上調一點，或者零股撮合本來就要等幾分鐘。收盤還沒成交，單子就自動失效，明天再掛。</p>
+        </div>
+        <div>
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">「成交價跟我看到的不一樣？」</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">正常。報價是上一秒的，成交是這一秒的。差幾毛錢對你 30 年的計畫沒有任何影響。</p>
+        </div>
+        <div>
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">「買完馬上就跌了，我是不是買貴了？」</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">你會遇到，而且不只一次。這正是為什麼我們用定期定額——你不是在賭這一筆，你是在買未來 360 筆的平均。</p>
+        </div>
+        <div>
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">「帳戶顯示的成本跟我算的不一樣？」</div>
+          <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">多半是手續費含進去了，或者配息、除息造成的調整。一年看兩次就好，不用對到小數點。</p>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px; background: #FFFDF9;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 4 / 4</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q4.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q4.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q4.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q4.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top: 24px; background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 26px 30px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 6px;">你的測驗成績</div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900;">{{ scoreLabel }}</div>
+        </div>
+        <button onClick="{{ resetQuiz }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; padding: 12px 20px; border: 1px solid #C9BFA9; background: #FBF7F0; color: #55503F; border-radius: 4px; cursor: pointer;">全部重做</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="t5" data-screen-label="05 總結" style="padding: 96px 24px 130px; border-top: 1px dashed #DCD2BF; background: #22201C; color: #FBF7F0;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #E0A87C; margin-bottom: 20px;">這堂課的四句話</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 44px;">你現在是個有部位的人了</h2>
+    <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 52px;">
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">01</div>
+        <div style="font-size: 21px; line-height: 1.8;">零股就好。你不需要一次拿出二十幾萬買一整張。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">02</div>
+        <div style="font-size: 21px; line-height: 1.8;">現股、限價、ROD。融資這輩子都不要碰。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">03</div>
+        <div style="font-size: 21px; line-height: 1.8;">交割帳戶要有錢。T+2 自動扣款，別違約交割。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F; border-bottom: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">04</div>
+        <div style="font-size: 21px; line-height: 1.8;">設好定期定額，然後把 APP 藏起來。</div>
+      </div>
+    </div>
+    <div style="background: #2E2B24; border-radius: 6px; padding: 36px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #E0A87C; margin-bottom: 14px;">下一堂</div>
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; line-height: 1.5; margin-bottom: 14px;">第 3 堂 · 便當店大盤點</div>
+      <p style="font-size: 17px; line-height: 1.95; color: #C8C1B2; margin: 0;">市值型、高股息、主題型、債券與槓桿——市面上那些熱門 ETF 各自裝了什麼、什麼時候會讓你失望。等你手上有部位了，比較才有感覺。</p>
+    </div>
+    <p style="font-size: 15px; line-height: 1.9; color: #8B8375; margin: 32px 0 0;">這份教材是流程與觀念說明，不是投資建議；費率與規則以各券商及交易所最新公告為準。</p>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showQuiz&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;教材設定&quot;},&quot;defaultAmount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5000,&quot;min&quot;:1000,&quot;max&quot;:100000,&quot;step&quot;:1000,&quot;unit&quot;:&quot;元&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;費用試算預設值&quot;},&quot;defaultMinFee&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1&quot;,&quot;20&quot;,&quot;50&quot;],&quot;default&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;費用試算預設值&quot;}}">
+const QUIZ = [
+  { id: 'q1', q: '挑券商的時候，對「每月定期定額幾千塊」的你來說，最該注意什麼？',
+    opts: [
+      { t: '研究報告寫得夠不夠專業', ok: false },
+      { t: '手續費折扣和最低收費，以及有沒有定期定額功能', ok: true },
+      { t: '有沒有營業員可以打電話問明牌', ok: false } ],
+    why: '答案是第二個。你一年只操作幾次，用不到研究團隊；但小額買進時，「低消 20 元」會直接吃掉你 1~2% 的本金。' },
+  { id: 'q2', q: '你今天下單買了 5000 元的 ETF，錢什麼時候從銀行帳戶扣走？',
+    opts: [
+      { t: '按下確認的那一秒', ok: false },
+      { t: '第二個交易日早上（T+2）', ok: true },
+      { t: '這個月月底統一結算', ok: false } ],
+    why: '答案是第二個。所以下單前務必確認交割帳戶裡有錢——扣不到叫「違約交割」，會影響信用紀錄，是新手最不值得踩的雷。' },
+  { id: 'q3', q: '同樣買 2000 元，券商 A 低消 20 元、券商 B 低消 1 元。差多少？',
+    opts: [
+      { t: '差 19 元，可以忽略', ok: false },
+      { t: '差將近本金的 1%，而且每個月都會發生', ok: true },
+      { t: '沒差，反正之後會漲回來', ok: false } ],
+    why: '答案是第二個。19 元聽起來很小，但佔 2000 元將近 1%，比 ETF 一整年的內扣費用還高，而且你每個月扣一次。小額投資人特別要看低消。' },
+  { id: 'q4', q: '設定好定期定額之後，接下來三年你最該做的事是？',
+    opts: [
+      { t: '每天看漲跌，跌多了就加碼、漲多了就減碼', ok: false },
+      { t: '幾乎什麼都不做，一年檢查一兩次', ok: true },
+      { t: '每個月手動挑最低點那天買', ok: false } ],
+    why: '答案是第二個。定期定額的整個設計目的，就是把「要不要買」這個決定從你手上拿走。你越常干預它，成本越高、報酬越差。' }
+];
+
+const STEPS = [
+  { n: '01', title: '登入 APP，找到「下單」或「交易」', body: '第一次登入通常要設定交易密碼，跟登入密碼不一樣，記好。' },
+  { n: '02', title: '輸入代號，例如 006208', body: '不要用中文搜尋，名字很像的商品太多了。認代號最不會錯。' },
+  { n: '03', title: '把交易類別切成「零股」', body: '通常在「整股／盤中零股／盤後零股」那排。選盤中零股。' },
+  { n: '04', title: '選「現股」、「限價」、「ROD」', body: '大多是預設值。確認一下沒有變成融資就好。' },
+  { n: '05', title: '填價格和股數', body: '價格填現在的報價（或高一兩毛比較容易成交），股數從 1 股開始都可以。' },
+  { n: '06', title: '確認金額，送出，看「委託查詢」', body: '零股要等撮合，幾分鐘後回來看有沒有成交。成交了就結束了，真的就這樣。' }
+];
+
+class Component extends DCLogic {
+  state = { answers: {}, amount: 5000, discount: 6, minFee: 20, active: '', progress: 0 };
+
+  componentDidMount() {
+    this.setState({ amount: this.props.defaultAmount ?? 5000, minFee: this.props.defaultMinFee ?? 20 });
+    this._onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = null;
+        const h = document.documentElement;
+        const max = h.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+        let active = '';
+        for (const id of ['t1','t2','t3','t4','t5']) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.45) active = id;
+        }
+        this.setState({ progress, active });
+      });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentWillUnmount() { window.removeEventListener('scroll', this._onScroll); }
+
+  go(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+  }
+
+  quiz(def) {
+    const picked = this.state.answers[def.id];
+    const answered = picked !== undefined;
+    return {
+      q: def.q, answered, why: answered ? def.why : '',
+      opts: def.opts.map((o, idx) => {
+        const isPicked = picked === idx;
+        let bg = '#FBF7F0', bd = '#E5DCCC', fg = '#22201C', mark = String.fromCharCode(65 + idx);
+        if (answered) {
+          if (o.ok) { bg = '#EAF2EB'; bd = '#4A7C59'; mark = '○'; }
+          else if (isPicked) { bg = '#FBEDE7'; bd = '#C4552F'; mark = '✕'; }
+          else { bg = '#FBF7F0'; bd = '#EFE7D8'; fg = '#9A9080'; }
+        }
+        return { t: o.t, bg, bd, fg, mark,
+          pick: () => { if (!answered) this.setState(s => ({ answers: { ...s.answers, [def.id]: idx } })); } };
+      })
+    };
+  }
+
+  renderVals() {
+    const { amount, discount, minFee, active, progress } = this.state;
+    const raw = amount * 0.001425 * (discount / 10);
+    const buyFee = Math.max(minFee, Math.round(raw));
+    const sellFee = buyFee;
+    const tax = Math.round(amount * 0.001);
+    const sellCost = sellFee + tax;
+    const roundTrip = ((buyFee + sellCost) / amount) * 100;
+
+    let verdict;
+    if (buyFee > raw + 0.5 && roundTrip > 1) {
+      verdict = '注意：低消把你的手續費拉高到 ' + ((buyFee / amount) * 100).toFixed(2) + '%，一買一賣總共 ' + roundTrip.toFixed(2) + '%。這個金額配這家券商不划算——加大單筆金額，或換低消更低的券商。';
+    } else if (roundTrip > 0.5) {
+      verdict = '一買一賣總成本 ' + roundTrip.toFixed(2) + '%，還可以接受。但這就是為什麼你不該一年進出十幾次。';
+    } else {
+      verdict = '一買一賣總成本只有 ' + roundTrip.toFixed(2) + '%，很健康。長期持有的話，這筆費用你這輩子只付兩次。';
+    }
+
+    const answers = this.state.answers;
+    const done = QUIZ.filter(d => answers[d.id] !== undefined);
+    const right = QUIZ.filter(d => answers[d.id] !== undefined && d.opts[answers[d.id]].ok).length;
+
+    const navDefs = [['t1','① 開戶'], ['t2','② 名詞'], ['t3','③ 費用'], ['t4','④ 下單'], ['t5','⑤ 總結']];
+
+    const out = {
+      progressPct: progress,
+      showQuiz: this.props.showQuiz ?? true,
+      nav: navDefs.map(([id, label]) => ({
+        label,
+        bg: active === id ? '#22201C' : 'transparent',
+        fg: active === id ? '#FBF7F0' : '#7A7263',
+        go: () => this.go(id)
+      })),
+      steps: STEPS,
+      amount, discount,
+      amountLabel: amount.toLocaleString('en-US') + ' 元',
+      discountLabel: discount === 10 ? '無折扣' : discount + ' 折',
+      setAmount: e => this.setState({ amount: Number(e.target.value) }),
+      setDiscount: e => this.setState({ discount: Number(e.target.value) }),
+      minFeeOpts: [1, 20, 50].map(v => ({
+        label: v + ' 元',
+        bg: minFee === v ? '#22201C' : '#FBF7F0',
+        bd: minFee === v ? '#22201C' : '#E5DCCC',
+        fg: minFee === v ? '#FBF7F0' : '#22201C',
+        pick: () => this.setState({ minFee: v })
+      })),
+      buyFeeLabel: buyFee.toLocaleString('en-US') + ' 元',
+      buyFeePct: ((buyFee / amount) * 100).toFixed(2) + '%',
+      sellCostLabel: sellCost.toLocaleString('en-US') + ' 元',
+      roundTripPct: roundTrip.toFixed(2) + '%',
+      feeVerdict: verdict,
+      scoreLabel: done.length === 0 ? '還沒開始作答' : right + ' / ' + done.length + ' 題正確',
+      resetQuiz: () => this.setState({ answers: {} })
+    };
+    QUIZ.forEach((d, i) => { out['q' + (i + 1)] = this.quiz(d); });
+    return out;
+  }
+}
+
+</script>
+</body>
+</html>
