@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #FBF7F0; color: #22201C; font-family: "Noto Sans TC", sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #C4552F; text-decoration: none; border-bottom: 1px solid #E0C2B4; }
+  a:hover { color: #22201C; border-bottom-color: #22201C; }
+  * { box-sizing: border-box; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<div style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(251,247,240,.92); backdrop-filter: blur(8px); border-bottom: 1px solid #E5DCCC;">
+  <div style="height: 3px; background: #EFE7D8;">
+    <div style="height: 3px; background: #C4552F; width: {{ progressPct }}%;"></div>
+  </div>
+  <div style="max-width: 980px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 18px; justify-content: space-between;">
+    <div style="font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15px; letter-spacing: .04em; white-space: nowrap;">第 3 堂 · 盤點</div>
+    <div style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+        <button onClick="{{ n.go }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 11px; border: 0; border-radius: 999px; cursor: pointer; background: {{ n.bg }}; color: {{ n.fg }};">{{ n.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+<section data-screen-label="封面" style="padding: 150px 24px 110px;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 28px;">第 3 堂 · 便當店大盤點</div>
+    <h1 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 68px; line-height: 1.18; letter-spacing: -.01em; margin: 0 0 32px; text-wrap: balance;">200 多種便當，<br />其實只有四種。</h1>
+    <p style="font-size: 21px; line-height: 1.9; color: #55503F; max-width: 640px; margin: 0 0 44px; text-wrap: pretty;">你現在手上有部位了，可以開始看菜單了。台灣掛牌的 ETF 有 200 多檔，聽起來很可怕，但它們只分成四大類。每一類我們固定問四個問題：裡面裝什麼、它收多少、適合誰、以及——什麼時候它會讓你失望。</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 56px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">4 大類</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">可切換對照表</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">5 題小測驗</div>
+      <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 4px; padding: 14px 18px; font-size: 14px; font-weight: 500;">1 個決策流程</div>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 14px; padding-top: 34px; border-top: 2px solid #22201C; max-width: 640px;">
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 44px; font-weight: 700; line-height: 1;">1</div>
+      <div>
+        <div style="font-size: 19px; font-weight: 700; margin-bottom: 4px;">先學會看標籤</div>
+        <div style="font-size: 15px; color: #7A7263;">往下滑就開始了</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="e1" data-screen-label="01 看標籤" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">開場</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">名字很長，但每個字都在告訴你裡面是什麼</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 22px; text-wrap: pretty;">你想想看便利商店的便當標籤：「香蒜｜嫩雞｜義大利麵」——你不用打開就知道會吃到什麼。ETF 的名字也是這樣，只是它用的是行話。</p>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">還有一件事你一定要學會分：<strong style="color:#22201C">「配息率高」不等於「賺得多」</strong>。這是新手最貴的一個誤會，我們等一下會專門講。</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 34px; margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 20px;">拆一個名字給你看</div>
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; line-height: 1.5; margin-bottom: 26px;">元大 <span style="color: #C4552F;">台灣</span> <span style="color: #4A7C59;">卓越 50</span> 證券投資信託基金</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px;">
+        <div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">元大</div>
+          <p style="font-size: 16px; line-height: 1.85; color: #55503F; margin: 0;">誰在賣這個便當（發行的投信公司）。跟好不好吃關係不大。</p>
+        </div>
+        <div>
+          <div style="font-size: 15px; font-weight: 700; color: #C4552F; margin-bottom: 6px;">台灣</div>
+          <p style="font-size: 16px; line-height: 1.85; color: #55503F; margin: 0;">食材來自哪裡（投資的市場）。台灣、美國、全球、還是新興市場。</p>
+        </div>
+        <div>
+          <div style="font-size: 15px; font-weight: 700; color: #4A7C59; margin-bottom: 6px;">卓越 50</div>
+          <p style="font-size: 16px; line-height: 1.85; color: #55503F; margin: 0;">怎麼挑菜（追蹤什麼指數）、幾樣菜。這是最重要的一格。</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F5EFE2; border-radius: 6px; padding: 28px 30px; margin-bottom: 48px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A8B6C; margin-bottom: 10px;">看到這些字要提高警覺</div>
+      <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">「正 2」「反 1」＝槓桿／反向，短線工具。「B」結尾＝債券。「精選」「優選」「智能」「主動」＝有人在幫你挑，通常費用比較高。這些不是壞東西，但都不是你現在該買的東西。</p>
+    </div>
+  </div>
+</section>
+
+<section id="e2" data-screen-label="02 四大類" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF; background: #F7F1E6;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">主課</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 20px;">四種便當，點來看看</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 34px; text-wrap: pretty;">點上面的分類切換。每一類的最後一欄「什麼時候會讓你失望」，是我覺得最值得你讀的一欄——沒有人在賣東西的時候會跟你講這個。</p>
+
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.pick }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 16px; font-weight: 700; padding: 13px 20px; border-radius: 5px; cursor: pointer; background: {{ t.bg }}; border: 2px solid {{ t.bd }}; color: {{ t.fg }};">{{ t.label }}</button>
+      </sc-for>
+    </div>
+
+    <div style="background: #FFFFFF; border: 2px solid #22201C; border-radius: 6px; padding: 38px 36px; margin-bottom: 40px;">
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; margin-bottom: 8px;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 36px; font-weight: 900;">{{ cat.name }}</div>
+        <div style="font-size: 15px; font-weight: 700; padding: 6px 12px; border-radius: 999px; background: {{ cat.tagBg }}; color: {{ cat.tagFg }};">{{ cat.tag }}</div>
+      </div>
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 500; line-height: 1.7; color: #55503F; margin-bottom: 30px;">{{ cat.metaphor }}</div>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 1px dashed #DCD2BF; margin-bottom: 28px;">
+        <sc-for list="{{ cat.examples }}" as="x" hint-placeholder-count="3">
+          <div style="background: #F5EFE2; border-radius: 4px; padding: 12px 16px;">
+            <div style="font-family: 'Noto Serif TC', serif; font-size: 19px; font-weight: 900;">{{ x.code }}</div>
+            <div style="font-size: 13px; color: #7A7263; margin-top: 2px;">{{ x.name }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 12px;">裡面裝什麼</div>
+          <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">{{ cat.what }}</p>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 12px;">誰適合</div>
+          <p style="font-size: 17px; line-height: 1.95; color: #55503F; margin: 0;">{{ cat.who }}</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+        <div style="background: #EAF2EB; border-radius: 5px; padding: 24px;">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #4A7C59; margin-bottom: 14px;">優點</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{ cat.pros }}" as="p" hint-placeholder-count="3">
+              <div style="display: flex; gap: 10px; font-size: 16px; line-height: 1.85; color: #35402F;"><span style="color: #4A7C59; font-weight: 700;">＋</span><span>{{ p.t }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background: #FBEDE7; border-radius: 5px; padding: 24px;">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">缺點</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{ cat.cons }}" as="c" hint-placeholder-count="3">
+              <div style="display: flex; gap: 10px; font-size: 16px; line-height: 1.85; color: #4A322A;"><span style="color: #C4552F; font-weight: 700;">－</span><span>{{ c.t }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px; padding-top: 26px; border-top: 2px solid #22201C;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 12px;">什麼時候它會讓你失望</div>
+        <p style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 500; line-height: 1.75; margin: 0;">{{ cat.disappoint }}</p>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px; background: #FFFDF9;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 1 / 5</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q1.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q1.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q1.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q1.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="e3" data-screen-label="03 配息真相" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">重點單元</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">配息不是天上掉下來的，是從你自己口袋裡拿的</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 22px; text-wrap: pretty;">你想想看你有一杯 100 元的珍奶。店員問你要不要「配息」，你說好，他就從你的杯子裡倒 15 元出來，裝在小杯子裡遞給你，然後說「恭喜你領到 15% 配息」。你的珍奶現在是 85 元。</p>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">這不是騙人——大杯子（公司）本來就一直在自己變大，倒出來的錢是真的。但關鍵是：<strong style="color:#22201C">配息的當天，淨值會扣掉一樣的金額</strong>。這叫「除息」。你的總資產在那一秒完全沒變。</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 34px; margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 6px;">示意圖 · 除息當天發生什麼事</div>
+      <div style="font-size: 15px; color: #7A7263; margin-bottom: 28px;">左邊是你的資產，右邊也是。總量一樣。</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 30px; align-items: end;">
+        <div>
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">除息前</div>
+          <div style="height: 200px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="height: 100%; background: #22201C; border-radius: 4px 4px 0 0; display: flex; align-items: center; justify-content: center; color: #FBF7F0; font-size: 15px; font-weight: 500;">全部在裡面</div>
+          </div>
+          <div style="border-top: 2px solid #22201C; padding-top: 10px; font-size: 15px; color: #55503F;">100 元的 ETF</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">除息後</div>
+          <div style="height: 200px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;">
+            <div style="height: 15%; background: #C4552F; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 500;">配到你手上的現金</div>
+            <div style="height: 85%; background: #22201C; border-radius: 4px 4px 0 0; display: flex; align-items: center; justify-content: center; color: #FBF7F0; font-size: 15px; font-weight: 500;">還在裡面的</div>
+          </div>
+          <div style="border-top: 2px solid #22201C; padding-top: 10px; font-size: 15px; color: #55503F;">85 元的 ETF ＋ 15 元現金</div>
+        </div>
+      </div>
+      <div style="margin-top: 28px; padding-top: 24px; border-top: 1px dashed #DCD2BF; font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 500; line-height: 1.7;">所以「配息 15%」不是報酬率 15%。真正的報酬率要看「淨值成長 ＋ 配息」加起來，這叫<span style="background: linear-gradient(transparent 62%, #F2C14E 62%);">總報酬</span>。</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 40px;">
+      <div style="background: #F5EFE2; border-radius: 6px; padding: 26px;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px;">要「填息」才算真的賺</div>
+        <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">除息後價格掉下去，之後漲回原本的價位，才叫填息。如果一直填不回來，你只是在把自己的本金一點一點領出來花。</p>
+      </div>
+      <div style="background: #F5EFE2; border-radius: 6px; padding: 26px;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px;">領到的錢要繳稅</div>
+        <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">股利要併入所得計算，單筆超過 2 萬還要扣二代健保補充保費。同樣的獲利，「留在裡面成長」比「配出來」省稅。</p>
+      </div>
+      <div style="background: #F5EFE2; border-radius: 6px; padding: 26px;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px;">但它確實有用</div>
+        <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">退休後你需要「不賣股票也有現金進來」，這時候配息型就很香。差別只在你現在是累積期，還是提領期。</p>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 2 / 5</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q2.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q2.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q2.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q2.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="e4" data-screen-label="04 主題型陷阱" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF; background: #F7F1E6;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">陷阱單元</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 28px;">為什麼「主題型」總是在最貴的時候上架</h2>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 22px; text-wrap: pretty;">你想想看：便當店什麼時候會推出「日式炸豬排便當」？在炸豬排最紅的時候。因為那時候好賣。ETF 一樣——半導體 ETF 在半導體最熱的時候發行，AI ETF 在大家瘋 AI 的時候發行。</p>
+    <p style="font-size: 19px; line-height: 2; color: #55503F; margin: 0 0 36px; text-wrap: pretty;">所以你看到的「募集破紀錄」，往往就是那個題材最貴的時刻。這不是誰在騙你，這是商業邏輯：<strong style="color:#22201C">投信賣的是你想買的東西，不一定是你需要的東西。</strong></p>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 34px; margin-bottom: 24px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 6px;">示意圖 · 主題型 ETF 的典型故事</div>
+      <div style="font-size: 15px; color: #7A7263; margin-bottom: 24px;">不是每一檔都這樣，但這個形狀很常見</div>
+      <svg viewBox="0 0 800 250" style="width: 100%; height: auto; display: block;">
+        <line x1="0" y1="210" x2="800" y2="210" stroke="#E5DCCC" stroke-width="1" />
+        <polyline points="20,200 120,185 220,150 320,90 400,40 470,70 540,120 620,150 700,140 780,155" fill="none" stroke="#C4552F" stroke-width="3" stroke-linejoin="round" />
+        <line x1="400" y1="40" x2="400" y2="215" stroke="#22201C" stroke-width="1.5" stroke-dasharray="5 5" />
+        <circle cx="400" cy="40" r="6" fill="#22201C" />
+        <text x="400" y="25" font-family="'Noto Sans TC', sans-serif" font-size="15" font-weight="700" fill="#22201C" text-anchor="middle">ETF 在這裡發行</text>
+        <text x="120" y="172" font-family="'Noto Sans TC', sans-serif" font-size="14" fill="#7A7263">題材開始發酵</text>
+        <text x="640" y="188" font-family="'Noto Sans TC', sans-serif" font-size="14" fill="#7A7263">熱度退了，你還在裡面</text>
+      </svg>
+    </div>
+
+    <div style="background: #22201C; color: #FBF7F0; border-radius: 6px; padding: 34px 36px; margin-bottom: 40px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #E0A87C; margin-bottom: 16px;">還有兩種你這輩子大概都不需要碰</div>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 23px; font-weight: 900; margin-bottom: 8px;">槓桿與反向（00631L、00632R）</div>
+          <p style="font-size: 17px; line-height: 1.9; margin: 0; color: #E8E1D4;">它們追的是「每天」的兩倍，不是「這幾年」的兩倍。長期持有會被來回震盪磨掉價值，這叫波動耗損。它們是專業人士的短線工具，不是加速器。</p>
+        </div>
+        <div style="padding-top: 20px; border-top: 1px solid #3B382F;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 23px; font-weight: 900; margin-bottom: 8px;">債券型（00679B 這類「B」結尾的）</div>
+          <p style="font-size: 17px; line-height: 1.9; margin: 0; color: #E8E1D4;">債券的功能是「讓整個組合抖得比較小」，代價是長期報酬比較低。你 25 歲、還有 30 年、每個月有薪水進來——你的抗震能力本來就很強，現在不需要它。40 歲以後再討論。</p>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px; background: #FFFDF9;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 3 / 5</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q3.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q3.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q3.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q3.why }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="e5" data-screen-label="05 對照表" style="padding: 96px 24px; border-top: 1px dashed #DCD2BF;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #C4552F; margin-bottom: 20px;">一頁看完</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 34px;">四類放在一起比</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 40px; border-top: 2px solid #22201C;">
+      <sc-for list="{{ compare }}" as="r" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: minmax(120px, 170px) 1fr; gap: 24px; padding: 26px 0; border-bottom: 1px solid #DCD2BF;">
+          <div>
+            <div style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 900; margin-bottom: 6px;">{{ r.name }}</div>
+            <div style="font-size: 14px; font-weight: 700; color: {{ r.dotColor }};">{{ r.verdict }}</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 16px; line-height: 1.85; color: #55503F;"><strong style="color: #22201C;">波動</strong>　{{ r.vol }}</div>
+            <div style="font-size: 16px; line-height: 1.85; color: #55503F;"><strong style="color: #22201C;">費用</strong>　{{ r.fee }}</div>
+            <div style="font-size: 16px; line-height: 1.85; color: #55503F;"><strong style="color: #22201C;">現在的你</strong>　{{ r.now }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="background: #FFFFFF; border: 2px solid #22201C; border-radius: 6px; padding: 36px; margin-bottom: 40px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 22px;">如果你只想要一個結論，走這個流程</div>
+      <div style="display: flex; flex-direction: column; gap: 0;">
+        <div style="display: flex; gap: 18px; align-items: flex-start; padding-bottom: 22px;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 900; color: #C4552F; min-width: 34px;">Q1</div>
+          <div>
+            <div style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">這筆錢十年內會用到嗎？</div>
+            <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">會 → 停，放定存。不會 → 往下。</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px dashed #DCD2BF;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 900; color: #C4552F; min-width: 34px;">Q2</div>
+          <div>
+            <div style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">你現在需要每季有現金進來嗎？</div>
+            <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">不需要（你有工作）→ 市值型。需要（退休了）→ 再考慮高股息。</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px dashed #DCD2BF;">
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 900; color: #C4552F; min-width: 34px;">Q3</div>
+          <div>
+            <div style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">你願意多開一個海外帳戶嗎？</div>
+            <p style="font-size: 16px; line-height: 1.9; color: #55503F; margin: 0;">不願意 → 台股市值型一檔就好。願意 → 台股加全球，各半，之後不用再調。</p>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #22201C; font-family: 'Noto Serif TC', serif; font-size: 26px; font-weight: 700; line-height: 1.6;">大多數人走完會停在「市值型，一到兩檔」。這不是妥協，這就是答案。</div>
+      </div>
+    </div>
+
+    <sc-if value="{{ showQuiz }}" hint-placeholder-val="{{ true }}">
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px; margin-bottom: 16px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 4 / 5</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q4.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q4.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q4.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q4.why }}</div>
+        </sc-if>
+      </div>
+      <div style="border: 2px solid #22201C; border-radius: 6px; padding: 30px 30px 26px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #C4552F; margin-bottom: 14px;">小測驗 · 5 / 5</div>
+        <div style="font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 20px;">{{ q5.q }}</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ q5.opts }}" as="opt" hint-placeholder-count="3">
+            <button onClick="{{ opt.pick }}" style="text-align: left; font-family: 'Noto Sans TC', sans-serif; font-size: 17px; line-height: 1.6; padding: 15px 18px; border-radius: 5px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: {{ opt.bg }}; border: 2px solid {{ opt.bd }}; color: {{ opt.fg }};">
+              <span style="font-weight: 700; min-width: 18px;">{{ opt.mark }}</span>
+              <span>{{ opt.t }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ q5.answered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed #DCD2BF; font-size: 17px; line-height: 1.9; color: #55503F; animation: riseIn .3s ease;">{{ q5.why }}</div>
+        </sc-if>
+      </div>
+      <div style="margin-top: 24px; background: #FFFFFF; border: 1px solid #E5DCCC; border-radius: 6px; padding: 26px 30px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #9A9080; margin-bottom: 6px;">你的測驗成績</div>
+          <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900;">{{ scoreLabel }}</div>
+        </div>
+        <button onClick="{{ resetQuiz }}" style="font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; padding: 12px 20px; border: 1px solid #C9BFA9; background: #FBF7F0; color: #55503F; border-radius: 4px; cursor: pointer;">全部重做</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="e6" data-screen-label="06 總結" style="padding: 96px 24px 130px; border-top: 1px dashed #DCD2BF; background: #22201C; color: #FBF7F0;">
+  <div style="max-width: 860px; margin: 0 auto;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #E0A87C; margin-bottom: 20px;">這堂課的五句話</div>
+    <h2 style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 46px; line-height: 1.3; margin: 0 0 44px;">看完菜單，你會發現選擇變少了</h2>
+    <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 52px;">
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">01</div>
+        <div style="font-size: 21px; line-height: 1.8;">200 多檔只有四類。學會看標籤，你就能自己分類。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">02</div>
+        <div style="font-size: 21px; line-height: 1.8;">配息率不是報酬率。要看總報酬，還要看它填不填息。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">03</div>
+        <div style="font-size: 21px; line-height: 1.8;">主題型通常在最熱的時候上架。募集破紀錄不是好消息。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">04</div>
+        <div style="font-size: 21px; line-height: 1.8;">槓桿反向不是加速器，債券現在還不需要。</div>
+      </div>
+      <div style="display: flex; gap: 24px; align-items: baseline; padding: 26px 0; border-top: 1px solid #3B382F; border-bottom: 1px solid #3B382F;">
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; color: #E0A87C; min-width: 44px;">05</div>
+        <div style="font-size: 21px; line-height: 1.8;">市值型一到兩檔，就是絕大多數人的正確答案。</div>
+      </div>
+    </div>
+    <div style="background: #2E2B24; border-radius: 6px; padding: 36px;">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: .16em; color: #E0A87C; margin-bottom: 14px;">下一堂（如果你還想聽）</div>
+      <div style="font-family: 'Noto Serif TC', serif; font-size: 30px; font-weight: 900; line-height: 1.5; margin-bottom: 14px;">第 4 堂 · 資產配置與再平衡</div>
+      <p style="font-size: 17px; line-height: 1.95; color: #C8C1B2; margin: 0;">台股和全球怎麼分、什麼時候該加債券、一年一次的檢查該做什麼、以及未來你薪水變高之後怎麼調整。但老實說，你把前三堂做到，已經贏過大部分人了。</p>
+    </div>
+    <p style="font-size: 15px; line-height: 1.9; color: #8B8375; margin: 32px 0 0;">本教材提到的商品皆為分類舉例，不是推薦或投資建議，也不保證任何報酬。實際費率、成分、配息政策請查閱各檔最新公開說明書。</p>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showQuiz&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;教材設定&quot;},&quot;defaultTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;core&quot;,&quot;div&quot;,&quot;theme&quot;,&quot;other&quot;],&quot;default&quot;:&quot;core&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;教材設定&quot;}}">
+const CATS = [
+  {
+    key: 'core', label: '市值型', name: '市值型', tag: '主食',
+    tagBg: '#EAF2EB', tagFg: '#4A7C59',
+    metaphor: '最標準的雞腿便當。不驚喜，但你可以吃一輩子。',
+    examples: [
+      { code: '0050', name: '元大台灣50' },
+      { code: '006208', name: '富邦台50' },
+      { code: 'VOO', name: '美國 500 大' },
+      { code: 'VT', name: '全世界' }
+    ],
+    what: '照公司「市值大小」排序，直接把最大的那幾十、幾百家全裝進去。誰變大就自動裝更多，誰變小就自動減少——不需要有人判斷。',
+    who: '有薪水、十年以上不用這筆錢、希望買完就不用再想的人。也就是現在的你。',
+    pros: [
+      { t: '最分散，不用擔心押錯單一公司或單一產業' },
+      { t: '內扣費用通常最低（0.1%～0.4% 這個量級）' },
+      { t: '不需要更新判斷，指數自己會換血' },
+      { t: '長期報酬就是整個市場的報酬，這已經打敗大多數主動操作' }
+    ],
+    cons: [
+      { t: '很無聊。永遠不會有「我押中飆股」的故事可以講' },
+      { t: '台股的市值型會有一半以上壓在半導體，集中度比想像中高' },
+      { t: '大盤跌它就跌，沒有任何保護' }
+    ],
+    disappoint: '在某個熱門題材狂漲的那一年，你會覺得自己很笨——別人賺 60%，你賺 12%。這種時候撐得住的人，20 年後才是贏的那個。'
+  },
+  {
+    key: 'div', label: '高股息型', name: '高股息型', tag: '配菜特多',
+    tagBg: '#FDF3DC', tagFg: '#9A7B1F',
+    metaphor: '主菜小一點，但每個月固定給你一小碗湯。喝起來很暖。',
+    examples: [
+      { code: '0056', name: '元大高股息' },
+      { code: '00878', name: '國泰永續高股息' },
+      { code: '00919', name: '群益台灣精選高息' }
+    ],
+    what: '從市場裡挑「配息比較多」的公司裝進去。有些看過去的配息、有些看預測的配息，選股邏輯各家不同——這是它跟市值型最大的差別：有人在判斷。',
+    who: '已經退休、或需要「不賣股票也有現金流」的人。以及坦白說：需要「看到錢進來」才抱得住的人。',
+    pros: [
+      { t: '現金流穩定，心理上很好抱，不容易半路嚇跑' },
+      { t: '波動通常比市值型小一點' },
+      { t: '退休提領階段真的好用' }
+    ],
+    cons: [
+      { t: '配息要繳稅、單筆超過 2 萬還有二代健保補充保費' },
+      { t: '為了配息，會避開正在高速成長但不配息的公司——長期總報酬常常輸市值型' },
+      { t: '選股規則會換、成分會大改，等於有人在替你做主動判斷' },
+      { t: '「配息率 12%」的行銷數字，很容易讓人誤以為是報酬率' }
+    ],
+    disappoint: '當你發現「這五年領了好多息，但總資產成長得比朋友的 0050 慢」的時候。息是真的，只是它從你自己的成長裡拿走了一部分。'
+  },
+  {
+    key: 'theme', label: '主題型', name: '主題型 / 產業型', tag: '限量口味',
+    tagBg: '#FBEDE7', tagFg: '#C4552F',
+    metaphor: '這季限定的松露和牛便當。上架時大排長龍，下架時沒人記得。',
+    examples: [
+      { code: '00881', name: '台灣 5G' },
+      { code: '00891', name: '半導體' },
+      { code: '00893', name: '全球電動車' }
+    ],
+    what: '只裝某一個產業或題材的公司。半導體、AI、電動車、機器人、綠能——聽起來都很有未來感，因為它們就是照「聽起來有未來感」設計的。',
+    who: '已經有市值型核心部位、想額外押一小點（例如總資產 5% 以內）、而且輸得起的人。不是新手的主餐。',
+    pros: [
+      { t: '押對題材的那幾年，漲幅可以非常誇張' },
+      { t: '比自己選單一個股還是分散一些' }
+    ],
+    cons: [
+      { t: '幾乎都在題材最熱的時候發行，你買到的常常是高點' },
+      { t: '費用比市值型高' },
+      { t: '同一個產業一起漲、一起跌，分散效果很有限' },
+      { t: '題材退燒後可能沉寂好幾年，甚至規模太小被清算下市' }
+    ],
+    disappoint: '通常是買進後的第二年。熱度消失得比你想像的快，而你會開始說「再等等，它總會回來」——這句話是新手最常說的最後一句話。'
+  },
+  {
+    key: 'other', label: '債券與槓桿', name: '債券型 / 槓桿反向', tag: '不是給你的',
+    tagBg: '#EFE7D8', tagFg: '#7A7263',
+    metaphor: '一個是低鹽養生餐（給身體需要的人），一個是雙倍辣（吃錯會出事）。',
+    examples: [
+      { code: '00679B', name: '美債 20 年' },
+      { code: '00631L', name: '台灣50正2' },
+      { code: '00632R', name: '台灣50反1' }
+    ],
+    what: '債券型裝的是政府或大公司的借據，領利息。槓桿／反向型用期貨去放大或反轉「單日」漲跌幅，不是放大長期報酬。',
+    who: '債券型：接近退休、或整體資產已經很大、需要降低波動的人。槓桿反向：專業短線交易者，真的。',
+    pros: [
+      { t: '債券型能降低整個組合的波動，在股市大跌時比較安穩' },
+      { t: '債券型在提領階段可以提供比較穩的現金流' }
+    ],
+    cons: [
+      { t: '債券型長期報酬明顯低於股票，年輕時配太多會拖慢累積' },
+      { t: '槓桿型有「波動耗損」——市場來回震盪就算最後回到原點，你也會虧' },
+      { t: '槓桿反向型內扣費用高，且完全不適合長期持有' }
+    ],
+    disappoint: '債券型：在股市大漲的那幾年，它會拖住你。槓桿型：在任何一段震盪盤裡——大盤沒跌，但你的部位不見了一大塊。'
+  }
+];
+
+const QUIZ = [
+  { id: 'q1', q: '「市值型」ETF 決定裝哪些公司的方式是什麼？',
+    opts: [
+      { t: '基金經理人每季開會挑', ok: false },
+      { t: '照公司市值大小自動排序，大的裝多一點', ok: true },
+      { t: '挑配息最多的公司', ok: false } ],
+    why: '答案是第二個。這正是它費用低的原因——沒有人在判斷，規則自己跑。誰變大就自動占更多，誰不行了就自動被剔除。' },
+  { id: 'q2', q: '某檔 ETF 除息，配給你 15%。除息當天你的總資產？',
+    opts: [
+      { t: '增加 15%', ok: false },
+      { t: '幾乎沒變，只是從 ETF 裡搬到現金', ok: true },
+      { t: '減少 15%', ok: false } ],
+    why: '答案是第二個。就像從你自己的珍奶倒一小杯出來——總量沒變。要之後價格漲回去（填息），這筆息才真的算你賺到。' },
+  { id: 'q3', q: '為什麼「主題型 ETF 募集金額破紀錄」不一定是好消息？',
+    opts: [
+      { t: '因為規模太大會不好操作', ok: false },
+      { t: '因為它通常代表那個題材正在最熱、也最貴的時候', ok: true },
+      { t: '因為費用會變高', ok: false } ],
+    why: '答案是第二個。投信在題材最紅的時候發行最好賣，所以「大排長龍」跟「買在高點」常常是同一件事。' },
+  { id: 'q4', q: '你 25 歲、有穩定薪水、這筆錢 30 年後才要用。哪個配置最合理？',
+    opts: [
+      { t: '一到兩檔市值型，定期定額', ok: true },
+      { t: '高股息為主，領息再投入', ok: false },
+      { t: '槓桿型，反正時間長可以放大報酬', ok: false } ],
+    why: '答案是第一個。你的抗震能力來自「還有 30 年 ＋ 每個月有新錢進來」，所以你該追求的是最高的長期總報酬，那就是市值型。槓桿不是加速器，它會被震盪磨損。' },
+  { id: 'q5', q: '下面哪一句話是對的？',
+    opts: [
+      { t: '配息率越高，報酬率越高', ok: false },
+      { t: '真正該看的是「淨值成長 ＋ 配息」的總報酬', ok: true },
+      { t: '有配息就代表這檔基金賺錢', ok: false } ],
+    why: '答案是第二個。配息只是決定「錢放在哪一個口袋」，不代表賺多少。看總報酬，才比得出高下。' }
+];
+
+const COMPARE = [
+  { name: '市值型', verdict: '✓ 你的主餐', dotColor: '#4A7C59', vol: '中', fee: '最低', now: '就買這個。一到兩檔，定期定額。' },
+  { name: '高股息型', verdict: '△ 以後再說', dotColor: '#9A7B1F', vol: '中偏低', fee: '中', now: '累積期先不用。退休需要現金流時再考慮。' },
+  { name: '主題型', verdict: '△ 最多一小點', dotColor: '#C4552F', vol: '高', fee: '偏高', now: '想玩就抓 5% 以內，當娛樂費，別當主餐。' },
+  { name: '債券／槓桿', verdict: '✕ 現在不要', dotColor: '#7A7263', vol: '債券低／槓桿極高', fee: '槓桿高', now: '債券 40 歲後再談；槓桿反向直接跳過。' }
+];
+
+class Component extends DCLogic {
+  state = { answers: {}, tab: 'core', active: '', progress: 0 };
+
+  componentDidMount() {
+    if (this.props.defaultTab) this.setState({ tab: this.props.defaultTab });
+    this._onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = null;
+        const h = document.documentElement;
+        const max = h.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+        let active = '';
+        for (const id of ['e1','e2','e3','e4','e5','e6']) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.45) active = id;
+        }
+        this.setState({ progress, active });
+      });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentWillUnmount() { window.removeEventListener('scroll', this._onScroll); }
+
+  go(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+  }
+
+  quiz(def) {
+    const picked = this.state.answers[def.id];
+    const answered = picked !== undefined;
+    return {
+      q: def.q, answered, why: answered ? def.why : '',
+      opts: def.opts.map((o, idx) => {
+        const isPicked = picked === idx;
+        let bg = '#FBF7F0', bd = '#E5DCCC', fg = '#22201C', mark = String.fromCharCode(65 + idx);
+        if (answered) {
+          if (o.ok) { bg = '#EAF2EB'; bd = '#4A7C59'; mark = '○'; }
+          else if (isPicked) { bg = '#FBEDE7'; bd = '#C4552F'; mark = '✕'; }
+          else { bg = '#FBF7F0'; bd = '#EFE7D8'; fg = '#9A9080'; }
+        }
+        return { t: o.t, bg, bd, fg, mark,
+          pick: () => { if (!answered) this.setState(s => ({ answers: { ...s.answers, [def.id]: idx } })); } };
+      })
+    };
+  }
+
+  renderVals() {
+    const { tab, active, progress } = this.state;
+    const cat = CATS.find(c => c.key === tab) || CATS[0];
+    const answers = this.state.answers;
+    const done = QUIZ.filter(d => answers[d.id] !== undefined);
+    const right = QUIZ.filter(d => answers[d.id] !== undefined && d.opts[answers[d.id]].ok).length;
+    const navDefs = [['e1','① 看標籤'], ['e2','② 四大類'], ['e3','③ 配息真相'], ['e4','④ 陷阱'], ['e5','⑤ 對照表'], ['e6','⑥ 總結']];
+
+    const out = {
+      progressPct: progress,
+      showQuiz: this.props.showQuiz ?? true,
+      nav: navDefs.map(([id, label]) => ({
+        label,
+        bg: active === id ? '#22201C' : 'transparent',
+        fg: active === id ? '#FBF7F0' : '#7A7263',
+        go: () => this.go(id)
+      })),
+      tabs: CATS.map(c => ({
+        label: c.label,
+        bg: tab === c.key ? '#22201C' : '#FFFFFF',
+        bd: tab === c.key ? '#22201C' : '#E5DCCC',
+        fg: tab === c.key ? '#FBF7F0' : '#55503F',
+        pick: () => this.setState({ tab: c.key })
+      })),
+      cat,
+      compare: COMPARE,
+      scoreLabel: done.length === 0 ? '還沒開始作答' : right + ' / ' + done.length + ' 題正確',
+      resetQuiz: () => this.setState({ answers: {} })
+    };
+    QUIZ.forEach((d, i) => { out['q' + (i + 1)] = this.quiz(d); });
+    return out;
+  }
+}
+
+</script>
+</body>
+</html>
